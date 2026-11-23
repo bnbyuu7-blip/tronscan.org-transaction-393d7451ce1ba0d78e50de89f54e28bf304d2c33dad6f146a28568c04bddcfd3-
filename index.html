@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>DemoScan — Transaction Details</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5fa;
+  --card:#ffffff;
+  --ink:#222326;
+  --ink-2:#3d3c3f;
+  --muted:#7b7f87;
+  --faint:#9ea3ab;
+  --red:#c2342c;
+  --green:#2a8e25;
+  --green-bg:#e9f8e9;
+  --chip:#eceef1;
+  --line:#eef0f3;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{
+  background:#e9ebf1;
+  color:var(--ink);
+  font-family:Lato,"Helvetica Neue",Arial,sans-serif;
+  font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input{font:inherit}
+svg{display:block;flex:none}
+
+.app{
+  position:relative;
+  max-width:412px;
+  min-height:100vh;
+  margin:0 auto;
+  padding-bottom:20px;
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(circle at 18% 6%,#ffffff 0,rgba(255,255,255,0) 42%),
+    radial-gradient(circle at 92% 38%,#ffffff 0,rgba(255,255,255,0) 30%);
+}
+@media (min-width:520px){
+  .app{box-shadow:0 0 0 1px #dfe2ea,0 10px 40px rgba(20,30,50,.08)}
+}
+
+/* ---------- Header ---------- */
+.hdr{
+  position:sticky;top:0;z-index:20;
+  height:60px;
+  background:#ffffff;
+  box-shadow:0 1px 0 #ececf1;
+}
+.brand{
+  position:absolute;left:14px;top:9px;
+  display:flex;align-items:center;gap:3.5px;
+  font-size:10.5px;font-weight:900;letter-spacing:.4px;color:#1d1f23;
+  white-space:nowrap;
+}
+.brand .mark{margin-left:6px}
+.price{
+  position:absolute;left:14px;top:30px;
+  font-size:11px;line-height:14px;color:#333;white-space:nowrap;
+}
+.price .neg{color:#d62f36}
+.navr{
+  position:absolute;right:19px;top:13.5px;
+  display:flex;align-items:center;gap:9px;
+}
+.auth{font-size:11px;color:#333;white-space:nowrap}
+.auth a{color:#333;text-decoration:none}
+.auth i{font-style:normal;color:#555;margin:0 3px}
+.bell{
+  position:relative;
+  width:26px;height:26px;border-radius:50%;
+  background:#f6f7f9;border:1px solid #e6e8ec;
+  display:grid;place-items:center;
+}
+.bell .dot{
+  position:absolute;top:1px;right:-2px;
+  width:6px;height:6px;border-radius:50%;background:#e0322e;
+}
+.menu{width:18px;height:18px;display:grid;place-items:center}
+
+/* ---------- Search ---------- */
+.search{
+  margin:12px 14px 0;
+  height:48px;
+  display:flex;align-items:center;gap:9px;
+  padding:0 16px 0 21px;
+  background:#ffffff;
+  border-radius:10px;
+  box-shadow:0 1px 3px rgba(20,30,50,.06);
+}
+.search input{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;
+  font-size:11px;color:#222;
+}
+.search input::placeholder{color:#9aa0a9;opacity:1}
+
+/* ---------- Rotating promo banner ---------- */
+.banners{position:relative;height:72px;margin:27px 14px 0}
+.banner{
+  position:absolute;inset:0;
+  border-radius:10px;overflow:hidden;
+  color:#fff;
+  opacity:0;transition:opacity .6s ease;
+}
+.banner.on{opacity:1}
+.b1{
+  padding:10px 18px;
+  background:
+    radial-gradient(90% 140% at 100% 60%,#24463a 0%,rgba(36,70,58,0) 55%),
+    linear-gradient(100deg,#1c1f22 0%,#1f2326 60%,#1c2622 100%);
+}
+.b1 .l1{font-size:22px;font-weight:900;line-height:24px;letter-spacing:-.2px}
+.b1 .l1 em{font-style:normal;color:#3ddc84}
+.b1 .l2{font-size:19px;font-weight:900;line-height:22px;color:#3ddc84}
+.b1 .l3{font-size:11px;line-height:14px;color:#c4cbd0;margin-top:2px}
+.art{position:absolute;right:12px;top:8px;width:96px;height:56px}
+.c{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b9f6d2,#2bbf7a 60%,#128452)}
+.c1{width:34px;height:34px;left:40px;top:14px;box-shadow:0 0 0 2px rgba(255,255,255,.12)}
+.c2{width:26px;height:26px;left:58px;top:30px;opacity:.9}
+.card-g{position:absolute;left:12px;top:24px;width:30px;height:20px;border-radius:4px;background:linear-gradient(135deg,#3ddc84,#1ea862);transform:rotate(-14deg)}
+.b2{
+  padding:12px 18px;
+  display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(100deg,#111417 0%,#15241d 70%,#1a3a2b 100%);
+}
+.b2 p{margin:0;max-width:220px;font-size:12px;line-height:17px;color:#e6efe9}
+.b2 p b{color:#3ddc84;font-size:15px}
+.b2 .try{margin-top:4px;font-size:11px;font-weight:700;color:#3ddc84}
+
+/* ---------- Section title ---------- */
+.title-row{display:flex;align-items:center;gap:15px;margin:32px 14px 0}
+h1{margin:0;font-size:18px;line-height:24px;font-weight:600;color:#1f2024}
+.arrows{display:flex;gap:7px}
+.arr{
+  width:22px;height:22px;border-radius:5px;
+  background:#fff;box-shadow:0 1px 3px rgba(20,30,50,.12);
+  display:grid;place-items:center;
+}
+
+/* ---------- Fraud warning ---------- */
+.alert{
+  display:grid;grid-template-columns:14px minmax(0,1.3fr) minmax(0,1fr) 14px;
+  column-gap:8px;align-items:start;
+  margin:0 0 12px;padding:10px 12px;
+  border-radius:6px;background:#f4e6e7;color:#b3262e;
+  font-size:11px;line-height:15px;
+}
+.alert[hidden]{display:none!important}
+.alert-ic{margin-top:2px}
+.alert-txt{margin:0;color:#b3262e}
+.alert-link{color:#b3262e;text-decoration:underline;text-underline-offset:2px}
+.alert-x{width:14px;height:14px;display:grid;place-items:center;background:none;border:0;padding:0;cursor:pointer}
+
+/* ---------- Transfer summary (no card) ---------- */
+.tx{margin:10px 14px 0;color:#2b2c30;font-size:14px;line-height:28.5px}
+.addr-line{display:block;white-space:nowrap}
+.addr{color:var(--red);font-size:15px}
+@media (max-width:370px){.addr{font-size:14px}}
+.transfer{display:block}
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  height:24px;padding:0 9px;margin:0 2px;
+  border-radius:6px;background:var(--chip);
+  vertical-align:middle;
+  font-size:14px;color:#2b2c30;
+}
+.chip.amt{font-weight:600}
+.chip.usd{font-weight:400;color:#6e737c}
+.tok{width:17px;height:17px;flex:none;display:block}
+
+/* ---------- Copy button ---------- */
+.copy{
+  position:relative;display:inline-grid;place-items:center;
+  width:14px;height:14px;margin-left:9px;vertical-align:middle;
+}
+.copy svg{position:absolute;transition:opacity .15s}
+.copy .ic-check{opacity:0}
+.copy.done .ic-copy{opacity:0}
+.copy.done .ic-check{opacity:1}
+
+/* ---------- Cards ---------- */
+.card{
+  position:relative;
+  margin:14px 14px 0;
+  padding:0 14px 14px;
+  background:var(--card);
+  border-radius:12px;
+  box-shadow:0 1px 2px rgba(20,30,50,.03);
+}
+.card.first{margin-top:12px}
+.card.pad{padding:11px 14px 11px}
+.card.note{padding:12px 14px 12px}
+
+.row{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+  padding:7px 0;line-height:20px;font-size:14px;
+}
+.row.block{padding-bottom:3px}
+.lbl{
+  display:flex;align-items:center;gap:6px;
+  height:20px;padding-left:3px;
+  color:var(--ink-2);white-space:nowrap;
+}
+.qm{
+  display:inline-grid;place-items:center;
+  width:13px;height:13px;border-radius:3px;
+  background:#ebedf0;color:#2b2c30;
+  font-size:9px;font-weight:900;line-height:1;
+  flex:none;
+}
+.val{
+  display:flex;flex-direction:column;align-items:flex-end;
+  text-align:right;min-width:0;color:var(--ink-2);
+}
+.val-line{display:flex;align-items:center;justify-content:flex-end;gap:0;white-space:nowrap}
+.hash-val{font-size:14px;color:var(--ink-2)}
+.red{color:var(--red)}
+.time-line{
+  display:flex;align-items:center;gap:6px;margin-top:4px;
+  font-size:14px;line-height:20px;color:#2b2c30;white-space:nowrap;
+}
+.time-line .sep{color:#8a8f98}
+.time-line svg{margin-left:4px}
+
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  height:22px;padding:0 8px;border-radius:5px;
+  background:var(--green-bg);color:var(--green);
+  font-size:13px;font-weight:500;letter-spacing:.1px;
+}
+.pill.unconf{background:#fdf1e7;color:#f0873a;font-weight:500}
+.loader{margin-top:3px;align-self:flex-end;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sub{
+  margin-top:6px;line-height:18px;
+  font-size:12px;color:var(--muted);text-align:right;
+}
+.sub b{font-weight:400;color:#222}
+
+.hr{height:1px;background:var(--line)}
+
+/* SR dropdown */
+.sr{position:relative}
+.sr-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:14px;color:var(--ink-2);line-height:20px;
+}
+.sr-btn .chev{transition:transform .2s}
+.sr.open .sr-btn .chev{transform:rotate(180deg)}
+.sr-menu{
+  position:absolute;right:0;top:100%;z-index:6;
+  width:max-content;
+  min-width:256px;
+  padding:12px 16px 10px 30px;
+  background:#fff;border-radius:10px;
+  box-shadow:0 8px 24px rgba(20,30,50,.14);
+  font-size:14px;color:#222;
+}
+.sr-row{display:flex;gap:14px;line-height:25.5px;white-space:nowrap}
+
+/* Resources */
+.res{padding-top:14px}
+.res-sub{margin:8px 0 0 21.5px;font-size:11px;line-height:14px;color:var(--faint)}
+.res-toggle{
+  display:flex;justify-content:space-between;align-items:center;
+  width:100%;padding:11.5px 0 4px 14.5px;text-align:left;
+  color:var(--ink);
+}
+.bw-num{font-size:14px;line-height:20px;color:#222}
+.bw-lbl{margin-top:4px;font-size:13px;line-height:14px;color:var(--faint)}
+.chev{color:#6b717b;transition:transform .2s}
+.res-toggle.open .chev{transform:rotate(180deg)}
+.res-more{padding:2px 0 0 14.5px}
+.kv{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);margin-top:6px;line-height:20px}
+.kv b{font-weight:400;color:#222;font-size:13px}
+.kv2{margin-top:4px;font-size:13px;color:#222;line-height:20px}
+.kv2 small{font-size:10.5px;color:var(--faint)}
+
+/* From / To / Amount */
+.fld + .fld{margin-top:17.5px}
+.fld .lbl{padding-left:0}
+.box{
+  display:inline-flex;align-items:center;gap:0;
+  height:22px;margin:6.5px 0 0 -3.5px;padding:0 10px;
+  background:#f5f6f8;border-radius:6px;
+  font-size:13px;color:#222;white-space:nowrap;
+}
+.box .copy{margin-left:10px}
+.chips{display:flex;gap:8px;margin-top:6px}
+.chips .chip{height:24px;margin:0}
+.hr.spaced{margin:12px 0 10.5px}
+
+/* Private note */
+.note .lbl{padding-left:8px;color:#222;font-size:14px;height:20px}
+.note-txt{margin:5.5px 0 0 4px;font-size:14px;line-height:20px;color:#222}
+.note-txt a{color:var(--red);text-decoration:none}
+
+/* ---------- Footer ---------- */
+.foot{
+  margin-top:74px;
+  padding:28px 14px 22px;
+  border-top:1px solid #e4e6ec;
+}
+.foot-top{position:relative;height:17px;display:flex;align-items:center}
+.foot-brand{display:flex;align-items:center;gap:3.5px;font-size:14px;font-weight:900;letter-spacing:.3px;color:#111}
+.to-top{
+  position:absolute;right:0;top:-6px;
+  width:33px;height:33px;border-radius:6px;
+  background:#fff;box-shadow:0 1px 4px rgba(20,30,50,.10);
+  display:grid;place-items:center;
+}
+.tag{margin:13px 0 0;font-size:14px;line-height:20px;color:#222}
+.cols{display:grid;grid-template-columns:180px 1fr;margin-top:30px}
+.cols h4{margin:0 0 7px;font-size:14px;line-height:20px;font-weight:400;color:#111}
+.cols h4.gap{margin-top:26px}
+.cols a{
+  display:block;margin-bottom:7px;
+  font-size:14px;line-height:20px;color:var(--faint);text-decoration:none;
+}
+.social{display:flex;gap:16px;margin-top:16px;color:var(--faint)}
+.copyright{margin:14px 0 0;font-size:11px;line-height:14px;color:var(--faint)}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:84px;z-index:50;
+  transform:translate(-50%,16px);
+  padding:10px 18px;border-radius:12px;
+  background:rgba(70,72,78,.94);color:#fff;
+  font-size:13px;line-height:16px;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="tok-usdt" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="32" fill="#26A17B"/>
+      <path fill="#FFFFFF" d="M16 16h32v7H35.5v25h-7V23H16z"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="app">
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="brand">
+      <svg class="mark" width="23" height="16" viewBox="0 0 23 16" aria-hidden="true">
+        <path d="M11.5 0L23 4.2 11.5 8.4 0 4.2z" fill="#e5252e"/>
+        <path d="M0 6.2l11.5 4.2L23 6.2v2.2l-11.5 4.2L0 8.4z" fill="#e5252e"/>
+        <path d="M0 11.6l11.5 4.2L23 11.6v2.2L11.5 16 0 13.8z" fill="#e5252e"/>
+      </svg>
+      <span>DEMOSCAN</span>
+    </div>
+    <div class="price">TRX: <b style="font-weight:600">$0.3058</b> <span class="neg">(-0.10%)</span></div>
+    <div class="navr">
+      <span class="auth"><a href="#">Register</a><i>|</i><a href="#">Login</a></span>
+      <button class="bell" aria-label="Notifications">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2b2d33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="dot"></span>
+      </button>
+      <button class="menu" id="menuBtn" aria-label="Menu">
+        <svg width="18" height="13" viewBox="0 0 18 13" fill="none" stroke="#2b2d33" stroke-width="2" stroke-linecap="round"><path d="M1 1.5h16M4 6.5h13M1 11.5h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Search -->
+  <div class="search" role="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa0a9" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="M21 21l-4.6-4.6"/></svg>
+    <input id="searchInput" type="search" placeholder="Search by Token / Account / Contract / Transaction ..." aria-label="Search">
+  </div>
+
+  <!-- Rotating promo banner -->
+  <div class="banners" id="banners">
+    <div class="banner b1 on">
+      <div class="l1"><b>Gas</b><em>Free</em></div>
+      <div class="l2">Now Supports USDD!</div>
+      <div class="l3">Send USDD without holding TRX.</div>
+      <div class="art" aria-hidden="true">
+        <i class="card-g"></i><i class="c c1"></i><i class="c c2"></i>
+      </div>
+    </div>
+    <div class="banner b2">
+      <p>No TRX required for Gas use USDT for effortless transfers and save up to <b>60%</b> in fees</p>
+      <span class="try">Try It Now ›</span>
+    </div>
+  </div>
+
+  <!-- Section title -->
+  <div class="title-row">
+    <h1>Transaction Details</h1>
+    <div class="arrows">
+      <button class="arr" data-nav="Previous" aria-label="Previous">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2b2d33" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="arr" data-nav="Next" aria-label="Next">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2b2d33" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Transfer summary -->
+  <section class="tx">
+    <div class="alert" id="fraudAlert" role="alert">
+      <svg class="alert-ic" width="9" height="9" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 21h22L12 2z" fill="#b3262e"/><path d="M12 9v5.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.6" r="1.6" fill="#fff"/></svg>
+      <p class="alert-txt">This transaction is from a fraudulent address with a similar suffix.</p>
+      <!-- Set href to a verified URL you control; "#" is a placeholder -->
+      <a class="alert-link" href="#">Understand relevant information &gt;</a>
+      <button class="alert-x" id="alertClose" aria-label="Dismiss warning">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b3262e" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+    <div class="addr-line"><span class="addr">TQJHCaDcD8GKZ2FnxhNGxxhjdtsQCi3JXr</span><button class="copy" data-copy="TQJHCaDcD8GKZ2FnxhNGxxhjdtsQCi3JXr" aria-label="Copy address">
+      <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+      <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </button></div>
+    <div class="transfer">transferred <span class="chip amt"><span>0.3</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>TRX</span></span> <span class="chip usd">($0.09)</span> to</div>
+    <div class="addr-line"><span class="addr">THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8</span><button class="copy" data-copy="THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8" aria-label="Copy address">
+      <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+      <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </button></div>
+  </section>
+
+  <!-- Card 1: result, block, status, resources -->
+  <section class="card first">
+    <div class="row">
+      <div class="lbl"><i class="qm">?</i>Hash:</div>
+      <div class="val"><div class="val-line"><span class="hash-val">18f17674d12be9cfa… fb0fa</span><button class="copy" data-copy="DEMO_HASH_18f17674d12be9cfa_fb0fa" aria-label="Copy hash">
+        <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+        <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </button></div></div>
+    </div>
+
+    <div class="row">
+      <div class="lbl"><i class="qm">?</i>Result:</div>
+      <div class="val"><span class="pill"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2a8e25"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>SUCCESSFUL</span></div>
+    </div>
+
+    <div class="row block">
+      <div class="lbl"><i class="qm">?</i>Block &amp; Time:</div>
+      <div class="val">
+        <div class="val-line"><span class="red" style="font-size:14px">88251783</span><button class="copy" data-copy="88251783" aria-label="Copy block">
+          <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+          <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </button></div>
+        <div class="time-line">
+          <span>15 mins ago</span><span class="sep">|</span><span>2026-11-23 10:25:12 (UTC)</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ea3ab" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v4.5h-4.5"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row" style="padding-top:22px">
+      <div class="lbl"><i class="qm">?</i>Status:</div>
+      <div class="val">
+        <span class="pill unconf">UNCONFIRMED</span>
+        <div class="sub">Confirmed by <b>6</b> blocks</div>
+        <svg class="loader" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c9ccd3" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="42 15"/></svg>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top:6px;padding-bottom:4px">
+      <div class="lbl"><i class="qm">?</i>Confirmed SRs:</div>
+      <div class="sr" id="srRow">
+        <button class="sr-btn" id="srToggle" aria-expanded="false" aria-controls="srMenu">
+          <span>19</span>
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b717b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="sr-menu" id="srMenu" hidden>
+          <div class="sr-row"><span>NeuralNodes</span><span>metaverse home</span></div>
+          <div class="sr-row"><span>Ant Investment Group</span><span>OrionMind</span></div>
+          <div class="sr-row"><span>BlockchainOrg</span><span>TronSpark</span></div>
+          <div class="sr-row"><span>Luganodes</span><span>P2P.ORG</span><span>OKX Earn</span></div>
+          <div class="sr-row"><span>CryptoChain</span><span>CryptoGuyInZA</span></div>
+          <div class="sr-row"><span>Binance Staking</span><span>Nansen_ai</span></div>
+          <div class="sr-row"><span>OKCoinJapan</span><span>Kraken</span><span>Poloniex</span></div>
+          <div class="sr-row"><span>Tron Inc.</span><span>TRONALLIANCE</span></div>
+          <div class="sr-row"><span>JD Investment</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="res">
+      <div class="lbl"><i class="qm">?</i>Resources Consumed &amp; Fee:</div>
+      <div class="res-sub">Energy Fee Limit: 100 TRX</div>
+      <button class="res-toggle" id="resToggle" aria-expanded="false" aria-controls="resMore">
+        <div>
+          <div class="bw-num">273</div>
+          <div class="bw-lbl">Bandwidth</div>
+        </div>
+        <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b717b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="res-more" id="resMore" hidden>
+        <div class="kv"><span>Bandwidth Consumed</span><b>273</b></div>
+        <div class="kv2">273 bandwidth <small>(Staked/Free)</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 2: From / To / Amount -->
+  <section class="card pad">
+    <div class="fld">
+      <div class="lbl"><i class="qm">?</i>From:</div>
+      <div class="box"><span>TQJHCaDcD8GKZ2FnxhNGxxhjdtsQCi3JXr</span><button class="copy" data-copy="TQJHCaDcD8GKZ2FnxhNGxxhjdtsQCi3JXr" aria-label="Copy from address">
+        <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+        <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </button></div>
+    </div>
+    <div class="fld">
+      <div class="lbl"><i class="qm">?</i>To:</div>
+      <div class="box"><span>THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8</span><button class="copy" data-copy="THdcxyQTDN5bysLs1NNHHiaterMRgmVNT8" aria-label="Copy to address">
+        <svg class="ic-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3a9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></svg>
+        <svg class="ic-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a8e25" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </button></div>
+    </div>
+    <div class="hr spaced"></div>
+    <div class="fld">
+      <div class="lbl"><i class="qm">?</i>Amount:</div>
+      <div class="chips">
+        <span class="chip amt"><span>0.3</span><svg class="tok" aria-hidden="true"><use href="#tok-usdt"/></svg><span>TRX</span></span>
+        <span class="chip usd">($0.09)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 3: Private note -->
+  <section class="card note">
+    <div class="lbl"><i class="qm">?</i>Private Note:</div>
+    <p class="note-txt">To access this feature, please <a href="#">Log In</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <svg width="23" height="16" viewBox="0 0 23 16" aria-hidden="true">
+          <path d="M11.5 0L23 4.2 11.5 8.4 0 4.2z" fill="#e5252e"/>
+          <path d="M0 6.2l11.5 4.2L23 6.2v2.2l-11.5 4.2L0 8.4z" fill="#e5252e"/>
+          <path d="M0 11.6l11.5 4.2L23 11.6v2.2L11.5 16 0 13.8z" fill="#e5252e"/>
+        </svg>
+        <span>DEMOSCAN</span>
+      </div>
+      <button class="to-top" id="toTop" aria-label="Back to top">
+        <svg width="12" height="13" viewBox="0 0 24 24" fill="none" stroke="#2b2d33" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14"/><path d="M12 21V9"/><path d="M6 14l6-6 6 6"/></svg>
+      </button>
+    </div>
+    <p class="tag">The best blockchain explorer of TRON</p>
+
+    <div class="cols">
+      <div>
+        <h4>About Us</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <h4 class="gap">Resources</h4>
+        <a href="#">TRON ETF</a>
+        <a href="#">TRON Architecture</a>
+        <a href="#">TRON Whitepaper V2.2</a>
+      </div>
+      <div>
+        <h4>Services &amp; Support</h4>
+        <a href="#">API Service</a>
+        <a href="#">Advertise</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="social" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 3L2 11l7 2.5L11.5 21 14 15l6-12z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 19V5l9 8 9-8v14"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+    </div>
+    <p class="copyright">Copyright © 2026 DemoScan</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
+
+<script>
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+  /* Toast */
+  const toast = $('#toast');
+  let toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+  }
+
+  /* Copy buttons: swap icon to a check briefly and show a toast */
+  $$('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Copied');
+      } catch (e) {
+        showToast('Copy not available here');
+      }
+      btn.classList.add('done');
+      clearTimeout(btn._t);
+      btn._t = setTimeout(() => btn.classList.remove('done'), 1400);
+    });
+  });
+
+  /* Bandwidth details toggle */
+  const resToggle = $('#resToggle');
+  const resMore = $('#resMore');
+  resToggle.addEventListener('click', () => {
+    const open = resMore.hidden;
+    resMore.hidden = !open;
+    resToggle.classList.toggle('open', open);
+    resToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  /* Confirmed SRs dropdown */
+  const srRow = $('#srRow');
+  const srToggle = $('#srToggle');
+  const srMenu = $('#srMenu');
+  function setSr(open) {
+    srMenu.hidden = !open;
+    srRow.classList.toggle('open', open);
+    srToggle.setAttribute('aria-expanded', String(open));
+  }
+  srToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    setSr(srMenu.hidden);
+  });
+  document.addEventListener('click', e => {
+    if (!srRow.contains(e.target)) setSr(false);
+  });
+
+  /* Promo banner rotation (GasFree -> USDT) */
+  const slides = $$('.banner');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('on');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('on');
+  }, 4500);
+
+  /* Search: demo behaviour */
+  const searchInput = $('#searchInput');
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = searchInput.value.trim();
+      showToast(q ? 'Demo search: ' + q : 'Enter a sample search term');
+    }
+  });
+
+  /* Title arrows and menu: demo behaviour */
+  $$('.arr').forEach(b => b.addEventListener('click', () => showToast('Navigation is disabled in this demo')));
+  $('#menuBtn').addEventListener('click', () => showToast('Demo menu'));
+
+  /* Fraud warning dismiss */
+  $('#alertClose').addEventListener('click', () => { $('#fraudAlert').hidden = true; });
+
+  /* Back to top */
+  $('#toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+</script>
+</body>
+</html>
